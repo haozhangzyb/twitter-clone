@@ -1,6 +1,7 @@
 import { type FC } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import NavLink from "./NavLink";
+import Button from "./Button";
 
 const SideNav: FC = () => {
   const { data: sessionData } = useSession();
@@ -17,12 +18,12 @@ const SideNav: FC = () => {
           )}
         </li>
       </ul>
-      <button
-        className="rounded-full bg-white/10 px-5 py-3 text-xl font-semibold text-white no-underline transition hover:bg-white/20"
+      <Button
+        gray
         onClick={sessionData ? () => void signOut() : () => void signIn()}
       >
         {sessionData ? "Sign out" : "Sign in"}
-      </button>
+      </Button>
     </nav>
   );
 };

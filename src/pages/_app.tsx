@@ -22,7 +22,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <main className="min-h-screen bg-gradient-to-b from-[#2e026d] to-[#15162c] sm:pr-4">
         <div className="container mx-auto flex items-start text-slate-200">
           <SideNav />
-          <div className="min-h-screen flex-grow border-x">
+          <div className="min-h-screen flex-grow border-x border-x-slate-600">
             <Component {...pageProps} />
           </div>
         </div>

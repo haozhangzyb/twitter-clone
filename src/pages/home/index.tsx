@@ -1,7 +1,15 @@
-import { type FC } from "react";
+import { type NextPage } from "next";
+import NewTweetForm from "~/components/NewTweetForm";
 
-const Home: FC = ({}) => {
-  return <div>Home</div>;
+const Home: NextPage = () => {
+  return (
+    <>
+      <header className="sticky top-0 z-10 border-b border-b-slate-600">
+        <h1 className="px-4 py-3 text-xl font-bold">Home</h1>
+      </header>
+      <NewTweetForm />
+    </>
+  );
 };
 
 export default Home;

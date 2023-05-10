@@ -1,6 +1,6 @@
-import { type FC } from "react";
+import { type NextPage } from "next";
 
-const Profile: FC = ({}) => {
+const Profile: NextPage = ({}) => {
   return <div>Profile</div>;
 };
 
