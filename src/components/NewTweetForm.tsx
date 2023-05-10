@@ -1,10 +1,18 @@
 import { type FC } from "react";
 import Button from "./Button";
+import { useSession } from "next-auth/react";
+import Avatar from "./Avatar";
 
 const NewTweetForm: FC = ({}) => {
+  const { data: sessionData } = useSession();
+
+  if (!sessionData) {
+    return null;
+  }
+
   return (
     <form className="flex gap-2 border-b border-b-slate-600 px-4 py-2">
-      <div>Avatar Here</div>
+      <Avatar src={sessionData.user.image} />
       <div className="flex w-full flex-col gap-4">
         <textarea
           className="flex-grow resize-none overflow-hidden border-b border-b-slate-600 bg-transparent p-4 text-lg font-semibold outline-none"
