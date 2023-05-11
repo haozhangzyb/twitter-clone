@@ -10,7 +10,7 @@ interface AvatarProps {
 const Avatar: FC<AvatarProps> = ({ src, className = "" }) => {
   return (
     <div
-      className={`h-14 w-14 overflow-hidden rounded-full ${className} relative`}
+      className={`h-14 w-16 overflow-hidden rounded-full ${className} relative`}
     >
       {src == null ? (
         <VscAccount className="h-full w-full" />
