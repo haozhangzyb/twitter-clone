@@ -1,5 +1,6 @@
 import { type NextPage } from "next";
 import NewTweetForm from "~/components/NewTweetForm";
+import TweetsFeed from "~/components/TweetsFeed";
 
 const Home: NextPage = () => {
   return (
@@ -8,6 +9,7 @@ const Home: NextPage = () => {
         <h1 className="px-4 py-3 text-xl font-bold">Home</h1>
       </header>
       <NewTweetForm />
+      <TweetsFeed isOnlyTweetsFromFollowingUsers={false} />
     </>
   );
 };

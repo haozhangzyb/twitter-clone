@@ -17,6 +17,9 @@ const NewTweetForm: FC = ({}) => {
       console.log(newTweet);
       setInputVal("");
     },
+    onError: (err) => {
+      console.log(err);
+    },
   });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
