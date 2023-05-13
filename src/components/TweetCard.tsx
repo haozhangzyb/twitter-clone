@@ -10,46 +10,7 @@ interface TweetCardProps {
 }
 
 const TweetCard: FC<TweetCardProps> = ({ tweet }) => {
-  const ctx = api.useContext();
-
-  const { id, content, user, createdAt, likeCount, likedByMe } = tweet;
-  const toggleLike = api.tweet.toggleLike.useMutation({
-    onSuccess: ({ addedLike }) => {
-      const updateTweet: Parameters<
-        typeof ctx.tweet.infiniteTweets.setInfiniteData
-      >[1] = (oldTweets) => {
-        if (oldTweets == null) return;
-
-        const countModifier = addedLike ? 1 : -1;
-
-        return {
-          ...oldTweets,
-          pages: oldTweets.pages.map((page) => {
-            return {
-              ...page,
-              tweets: page.tweets.map((tweet) => {
-                if (tweet.id === id) {
-                  return {
-                    ...tweet,
-                    likeCount: tweet.likeCount + countModifier,
-                    likedByMe: addedLike,
-                  };
-                }
-
-                return tweet;
-              }),
-            };
-          }),
-        };
-      };
-
-      ctx.tweet.infiniteTweets.setInfiniteData({}, updateTweet);
-    },
-  });
-
-  const handleToggleLike = () => {
-    toggleLike.mutate({ tweetId: id });
-  };
+  const { id: tweetId, content, user, createdAt, likeCount, likedByMe } = tweet;
 
   return (
     <div className="flex gap-3 border-b border-b-slate-600 px-4 pt-4">
@@ -69,11 +30,10 @@ const TweetCard: FC<TweetCardProps> = ({ tweet }) => {
         <div style={{ overflowWrap: "anywhere" }}>{content}</div>
         <div className="my-1 flex">
           <LikeButton
-            disabled={toggleLike.isLoading}
+            tweetId={tweetId}
             likeCount={likeCount}
             showCount={true}
             likedByMe={likedByMe}
-            onClick={handleToggleLike}
           />
         </div>
       </div>
