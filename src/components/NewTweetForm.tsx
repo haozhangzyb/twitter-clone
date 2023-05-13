@@ -34,13 +34,13 @@ const NewTweetForm: FC = ({}) => {
       className="flex gap-2 border-b border-b-slate-600 px-4 py-2"
       onSubmit={handleSubmit}
     >
-      <Avatar src={sessionData.user.image} />
+      <Avatar user={sessionData.user} />
       <div className="flex w-full flex-col gap-4">
         <textarea
           value={inputVal}
           onChange={(e) => setInputVal(e.target.value)}
           ref={textAreaRef}
-          className="flex-grow resize-none overflow-hidden border-b border-b-slate-600 bg-transparent p-4 text-lg font-semibold outline-none"
+          className="flex-grow resize-none overflow-hidden border-b border-b-slate-600 bg-transparent px-4 py-3 text-lg font-semibold outline-none"
           placeholder="What's happening?"
         />
         <Button className="self-end" type="submit">
