@@ -14,8 +14,37 @@ const TweetCard: FC<TweetCardProps> = ({ tweet }) => {
 
   const { id, content, user, createdAt, likeCount, likedByMe } = tweet;
   const toggleLike = api.tweet.toggleLike.useMutation({
-    onSuccess: async ({ addedLike }) =>
-      await ctx.tweet.infiniteTweets.invalidate(),
+    onSuccess: ({ addedLike }) => {
+      const updateTweet: Parameters<
+        typeof ctx.tweet.infiniteTweets.setInfiniteData
+      >[1] = (oldTweets) => {
+        if (oldTweets == null) return;
+
+        const countModifier = addedLike ? 1 : -1;
+
+        return {
+          ...oldTweets,
+          pages: oldTweets.pages.map((page) => {
+            return {
+              ...page,
+              tweets: page.tweets.map((tweet) => {
+                if (tweet.id === id) {
+                  return {
+                    ...tweet,
+                    likeCount: tweet.likeCount + countModifier,
+                    likedByMe: addedLike,
+                  };
+                }
+
+                return tweet;
+              }),
+            };
+          }),
+        };
+      };
+
+      ctx.tweet.infiniteTweets.setInfiniteData({}, updateTweet);
+    },
   });
 
   const handleToggleLike = () => {
