@@ -3,13 +3,24 @@ import type { TweetQueryOutput } from "~/utils/types";
 import Avatar from "./Avatar";
 import Link from "next/link";
 import LikeButton from "./LikeButton";
+import { api } from "~/utils/api";
 
 interface TweetCardProps {
   tweet: TweetQueryOutput;
 }
 
 const TweetCard: FC<TweetCardProps> = ({ tweet }) => {
+  const ctx = api.useContext();
+
   const { id, content, user, createdAt, likeCount, likedByMe } = tweet;
+  const toggleLike = api.tweet.toggleLike.useMutation({
+    onSuccess: async ({ addedLike }) =>
+      await ctx.tweet.infiniteTweets.invalidate(),
+  });
+
+  const handleToggleLike = () => {
+    toggleLike.mutate({ tweetId: id });
+  };
 
   return (
     <div className="flex gap-3 border-b border-b-slate-600 px-4 pt-4">
@@ -29,9 +40,11 @@ const TweetCard: FC<TweetCardProps> = ({ tweet }) => {
         <div style={{ overflowWrap: "anywhere" }}>{content}</div>
         <div className="my-1 flex">
           <LikeButton
+            disabled={toggleLike.isLoading}
             likeCount={likeCount}
             showCount={true}
             likedByMe={likedByMe}
+            onClick={handleToggleLike}
           />
         </div>
       </div>

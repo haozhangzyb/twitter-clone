@@ -3,12 +3,16 @@ import { type FC } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 interface LikeButtonProps {
+  disabled: boolean;
+  onClick: () => void;
   likedByMe: boolean;
   showCount: boolean;
   likeCount: number;
 }
 
 const LikeButton: FC<LikeButtonProps> = ({
+  disabled,
+  onClick,
   likedByMe,
   showCount,
   likeCount,
@@ -21,7 +25,8 @@ const LikeButton: FC<LikeButtonProps> = ({
 
   return (
     <button
-      disabled={!isAuthenticated}
+      disabled={!isAuthenticated || disabled}
+      onClick={onClick}
       className={`group flex items-center text-sm text-slate-500 
         ${likedByMe ? "text-red-500" : ""} 
         ${isAuthenticated ? "hover:text-red-500" : ""} 
