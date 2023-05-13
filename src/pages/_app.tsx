@@ -19,8 +19,8 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <meta name="description" content="This is a twitter clone" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="min-h-screen bg-gradient-to-b from-[#2e026d] to-[#15162c] sm:pr-4">
-        <div className="container mx-auto flex items-start text-slate-200">
+      <main className="min-h-screen  bg-gradient-to-b from-[#2e026d] to-[#15162c] sm:pr-4">
+        <div className="container mx-auto flex max-w-3xl items-start text-slate-200">
           <SideNav />
           <div className="min-h-screen max-w-full flex-grow border-x border-x-slate-600">
             <Component {...pageProps} />

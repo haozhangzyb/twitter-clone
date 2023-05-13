@@ -15,8 +15,8 @@ const SideNav: FC = () => {
   const { data: sessionData } = useSession();
 
   return (
-    <nav className="sticky top-0 flex min-h-screen flex-shrink-0 flex-col justify-between py-4 pl-2 pr-4">
-      <ul className="flex flex-col items-start items-center gap-6 whitespace-nowrap text-xl">
+    <nav className="sticky top-0 flex min-h-screen flex-shrink-0 flex-col justify-between px-4 py-4 ">
+      <ul className="flex flex-col items-center gap-6 whitespace-nowrap text-xl md:items-start ">
         <li>
           <NavLink
             href="/home"
