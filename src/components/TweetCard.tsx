@@ -1,9 +1,9 @@
 import { type FC } from "react";
 import type { TweetQueryOutput } from "~/utils/types";
-import Avatar from "./Avatar";
 import Link from "next/link";
+
+import Avatar from "./Avatar";
 import LikeButton from "./LikeButton";
-import { api } from "~/utils/api";
 
 interface TweetCardProps {
   tweet: TweetQueryOutput;

@@ -54,10 +54,10 @@ export const tweetRouter = createTRPCRouter({
       }
 
       return {
-        tweets: tweets.map((tweet) => ({
-          likeCount: tweet._count.likes,
-          likedByMe: tweet.likes?.length > 0,
-          ...tweet,
+        tweets: tweets.map(({ likes, _count, ...filteredData }) => ({
+          likeCount: _count.likes,
+          likedByMe: likes?.length > 0,
+          ...filteredData,
         })),
         nextCursor,
       };

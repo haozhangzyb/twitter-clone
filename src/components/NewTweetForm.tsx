@@ -4,9 +4,11 @@ import { useSession } from "next-auth/react";
 import Avatar from "./Avatar";
 import useAutoResizeTextArea from "~/hooks/useAutoResizeTextArea";
 import { api } from "~/utils/api";
+import type { TweetQueryOutput } from "~/utils/types";
 
 const NewTweetForm: FC = ({}) => {
-  const { data: sessionData } = useSession();
+  const trpcContext = api.useContext();
+  const { data: sessionData, status } = useSession();
 
   const [inputVal, setInputVal] = useState("");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -14,11 +16,45 @@ const NewTweetForm: FC = ({}) => {
 
   const createTweet = api.tweet.create.useMutation({
     onSuccess: (newTweet) => {
-      console.log(newTweet);
+      if (status !== "authenticated") return;
+
       setInputVal("");
+
+      const newCacheTweet: TweetQueryOutput = {
+        ...newTweet,
+        likeCount: 0,
+        likedByMe: false,
+        user: {
+          id: sessionData.user.id,
+          name: sessionData.user.name ?? null,
+          image: sessionData.user.image ?? null,
+        },
+      };
+
+      const addNewTweet: Parameters<
+        typeof trpcContext.tweet.infiniteTweets.setInfiniteData
+      >[1] = (oldTweets) => {
+        if (oldTweets == null || oldTweets.pages[0] == null) {
+          // trpcContext.tweet.infiniteTweets.invalidate();
+          return;
+        }
+
+        return {
+          ...oldTweets,
+          pages: [
+            {
+              ...oldTweets.pages[0],
+              tweets: [newCacheTweet, ...oldTweets.pages[0].tweets],
+            },
+            ...oldTweets.pages.slice(1),
+          ],
+        };
+      };
+
+      trpcContext.tweet.infiniteTweets.setInfiniteData({}, addNewTweet);
     },
     onError: (err) => {
-      console.log(err);
+      console.error(err);
     },
   });
 
