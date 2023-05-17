@@ -1,13 +1,14 @@
 import { type NextPage } from "next";
+import Header from "~/components/Header";
 import NewTweetForm from "~/components/NewTweetForm";
 import TweetsFeed from "~/components/TweetsFeed";
 
 const Home: NextPage = () => {
   return (
     <>
-      <header className="sticky top-0 z-10 border-b border-b-slate-600">
+      <Header>
         <h1 className="px-4 py-3 text-xl font-bold">Home</h1>
-      </header>
+      </Header>
       <NewTweetForm />
       <TweetsFeed isOnlyTweetsFromFollowingUsers={false} />
     </>

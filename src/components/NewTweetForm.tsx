@@ -60,7 +60,9 @@ const NewTweetForm: FC = ({}) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createTweet.mutate({ content: inputVal });
+    if (inputVal !== "") {
+      createTweet.mutate({ content: inputVal });
+    }
   };
 
   if (!sessionData) return null;
@@ -78,6 +80,14 @@ const NewTweetForm: FC = ({}) => {
           ref={textAreaRef}
           className="flex-grow resize-none overflow-hidden border-b border-b-slate-600 bg-transparent px-4 py-3 text-lg font-semibold outline-none"
           placeholder="What's happening?"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              if (inputVal !== "") {
+                createTweet.mutate({ content: inputVal });
+              }
+            }
+          }}
         />
         <Button className="self-end" type="submit">
           Submit
