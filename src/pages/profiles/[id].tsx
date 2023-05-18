@@ -12,15 +12,16 @@ import { api } from "~/utils/api";
 import Header from "~/components/Header";
 import { getPlural } from "~/utils/tweet";
 import InfiniteFeed from "~/components/InfiniteFeed";
+import FollowButton from "~/components/FollowButton";
 
 const Profile: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
-  id,
+  id: userId,
 }) => {
-  const { data: profile } = api.profile.getById.useQuery({ id });
+  const { data: profile } = api.profile.getById.useQuery({ userId });
 
   const { data, isError, isLoading, hasNextPage, fetchNextPage } =
     api.tweet.infiniteProfileFeed.useInfiniteQuery(
-      { userId: id },
+      { userId },
       { getNextPageParam: (lastPage) => lastPage.nextCursor }
     );
   const tweets = data?.pages.flatMap((page) => page.tweets);
@@ -46,7 +47,10 @@ const Profile: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
               {getPlural(profile._count.follows, "following", "following")}
             </p>
           </div>
-          <button>Follow</button>
+          <FollowButton
+            isFollowing={profile.followers.length !== 0}
+            userId={userId}
+          />
         </div>
       </Header>
       {/* TODO: add a user profile card */}
@@ -84,7 +88,7 @@ export async function getStaticProps(
   }
 
   const ssg = ssgHelper();
-  await ssg.profile.getById.prefetch({ id });
+  await ssg.profile.getById.prefetch({ userId: id });
 
   return {
     props: {
