@@ -32,7 +32,8 @@ const Profile: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   return (
     <>
       <Head>
-        <title>{profile.name} / Twitter Clone</title>
+        {/* https://github.com/vercel/next.js/discussions/38256 */}
+        <title>`${profile.name} / Twitter Clone`</title>
       </Head>
       <Header showBackButton>
         <div className="flex w-full justify-between">
