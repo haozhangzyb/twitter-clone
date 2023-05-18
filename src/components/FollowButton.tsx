@@ -10,8 +10,6 @@ interface FollowButtonProps {
 
 const FollowButton: FC<FollowButtonProps> = ({ userId, isFollowing }) => {
   const { data: session, status } = useSession();
-  //   hide button if user is not authenticated or if the user is viewing their own profile
-  //   if (status !== "authenticated" || session?.user?.id === userId) return null;
 
   const trpcUtils = api.useContext();
   const { isLoading, mutate } = api.profile.toggleFollow.useMutation({
@@ -35,6 +33,9 @@ const FollowButton: FC<FollowButtonProps> = ({ userId, isFollowing }) => {
       });
     },
   });
+
+  //  hide button if user is not authenticated or if the user is viewing their own profile
+  if (status !== "authenticated" || session?.user?.id === userId) return null;
 
   return (
     <Button
