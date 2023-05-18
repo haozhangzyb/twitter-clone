@@ -36,7 +36,7 @@ const Profile: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
         <title>`${profile.name} / Twitter Clone`</title>
       </Head>
       <Header showBackButton>
-        <div className="flex w-full justify-between">
+        <div className="flex w-full items-center justify-between">
           <div className="flex flex-col items-start px-4 py-1">
             <h1 className=" text-xl font-bold">{profile.name}</h1>
             <p className="text-sm text-gray-500">

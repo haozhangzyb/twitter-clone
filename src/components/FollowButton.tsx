@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import { type FC } from "react";
 import { api } from "~/utils/api";
+import Button from "./Button";
 
 interface FollowButtonProps {
   userId: string;
@@ -36,9 +37,14 @@ const FollowButton: FC<FollowButtonProps> = ({ userId, isFollowing }) => {
   });
 
   return (
-    <button disabled={isLoading} onClick={() => mutate({ userId })}>
+    <Button
+      disabled={isLoading}
+      onClick={() => mutate({ userId })}
+      gray={isLoading}
+      className="h-fit"
+    >
       {isFollowing ? "Unfollow" : "Follow"}
-    </button>
+    </Button>
   );
 };
 
