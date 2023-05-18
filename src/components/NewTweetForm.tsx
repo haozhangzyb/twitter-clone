@@ -10,9 +10,13 @@ const NewTweetForm: FC = ({}) => {
   const trpcContext = api.useContext();
   const { data: sessionData, status } = useSession();
 
+  const user = sessionData?.user;
+
   const [inputVal, setInputVal] = useState("");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   useAutoResizeTextArea(textAreaRef.current, inputVal);
+
+  if (!user) return null;
 
   const createTweet = api.tweet.create.useMutation({
     onSuccess: (newTweet) => {
@@ -52,6 +56,18 @@ const NewTweetForm: FC = ({}) => {
       };
 
       trpcContext.tweet.infiniteFeed.setInfiniteData({}, addNewTweet);
+      trpcContext.tweet.infiniteFeed.setInfiniteData(
+        { onlyFollowing: true },
+        addNewTweet
+      );
+      trpcContext.tweet.infiniteFeed.setInfiniteData(
+        { onlyFollowing: false },
+        addNewTweet
+      );
+      trpcContext.tweet.infiniteProfileFeed.setInfiniteData(
+        { userId: user.id },
+        addNewTweet
+      );
     },
     onError: (err) => {
       console.error(err);

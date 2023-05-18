@@ -2,22 +2,19 @@ import { useSession } from "next-auth/react";
 import { type FC } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { api } from "~/utils/api";
+import { TweetQueryOutput } from "~/utils/types";
 
 interface LikeButtonProps {
-  tweetId: string;
-  likedByMe: boolean;
+  tweet: TweetQueryOutput;
+
   showCount: boolean;
-  likeCount: number;
 }
 
-const LikeButton: FC<LikeButtonProps> = ({
-  tweetId,
-  likedByMe,
-  showCount,
-  likeCount,
-}) => {
+const LikeButton: FC<LikeButtonProps> = ({ tweet, showCount }) => {
   const session = useSession();
   const isAuthenticated = session.status === "authenticated";
+
+  const { id: tweetId, user, likeCount, likedByMe } = tweet;
 
   const trpcContext = api.useContext();
 
@@ -52,6 +49,18 @@ const LikeButton: FC<LikeButtonProps> = ({
       };
 
       trpcContext.tweet.infiniteFeed.setInfiniteData({}, updateTweet);
+      trpcContext.tweet.infiniteFeed.setInfiniteData(
+        { onlyFollowing: true },
+        updateTweet
+      );
+      trpcContext.tweet.infiniteFeed.setInfiniteData(
+        { onlyFollowing: false },
+        updateTweet
+      );
+      trpcContext.tweet.infiniteProfileFeed.setInfiniteData(
+        { userId: user.id },
+        updateTweet
+      );
     },
   });
 

@@ -29,12 +29,7 @@ const TweetCard: FC<TweetCardProps> = ({ tweet }) => {
         </div>
         <div style={{ overflowWrap: "anywhere" }}>{content}</div>
         <div className="my-1 flex">
-          <LikeButton
-            tweetId={tweetId}
-            likeCount={likeCount}
-            showCount={true}
-            likedByMe={likedByMe}
-          />
+          <LikeButton tweet={tweet} showCount={true} />
         </div>
       </div>
     </div>
