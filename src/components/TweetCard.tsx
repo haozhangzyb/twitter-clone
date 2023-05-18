@@ -10,7 +10,7 @@ interface TweetCardProps {
 }
 
 const TweetCard: FC<TweetCardProps> = ({ tweet }) => {
-  const { id: tweetId, content, user, createdAt, likeCount, likedByMe } = tweet;
+  const { content, user, createdAt } = tweet;
 
   return (
     <div className="flex gap-3 border-b border-b-slate-600 px-4 pt-4">

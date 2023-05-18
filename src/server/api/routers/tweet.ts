@@ -3,7 +3,7 @@ import { type inferAsyncReturnType } from "@trpc/server";
 import { z } from "zod";
 
 import {
-  createTRPCContext,
+  type createTRPCContext,
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
@@ -151,5 +151,3 @@ async function getInfiniteFeedHelper({
     nextCursor,
   };
 }
-
-export type TweetRouter = typeof tweetRouter;

@@ -1,8 +1,7 @@
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "~/server/api/root";
-import type { TweetRouter } from "~/server/api/routers/tweet";
 
-type TweetRouterOutput = inferRouterOutputs<TweetRouter>;
+type TweetRouterOutput = RouterOutput["tweet"];
 
 export type TweetQueryOutput =
   TweetRouterOutput["infiniteFeed"]["tweets"][number];
