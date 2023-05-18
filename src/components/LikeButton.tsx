@@ -24,7 +24,7 @@ const LikeButton: FC<LikeButtonProps> = ({
   const { isLoading, mutate } = api.tweet.toggleLike.useMutation({
     onSuccess: ({ addedLike }) => {
       const updateTweet: Parameters<
-        typeof trpcContext.tweet.infiniteTweets.setInfiniteData
+        typeof trpcContext.tweet.infiniteFeed.setInfiniteData
       >[1] = (oldTweets) => {
         if (oldTweets == null) return;
 
@@ -51,7 +51,7 @@ const LikeButton: FC<LikeButtonProps> = ({
         };
       };
 
-      trpcContext.tweet.infiniteTweets.setInfiniteData({}, updateTweet);
+      trpcContext.tweet.infiniteFeed.setInfiniteData({}, updateTweet);
     },
   });
 

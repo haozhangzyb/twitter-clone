@@ -1,7 +1,5 @@
 import { type FC } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { api } from "~/utils/api";
-import TweetCard from "./TweetCard";
 import InfiniteFeed from "./InfiniteFeed";
 
 interface TweetsFeedProps {
@@ -11,7 +9,7 @@ interface TweetsFeedProps {
 const TweetsFeed: FC<TweetsFeedProps> = ({
   isOnlyTweetsFromFollowingUsers,
 }) => {
-  const res = api.tweet.infiniteTweets.useInfiniteQuery(
+  const res = api.tweet.infiniteFeed.useInfiniteQuery(
     { onlyFollowing: isOnlyTweetsFromFollowingUsers },
     { getNextPageParam: (lastPage) => lastPage.nextCursor }
   );

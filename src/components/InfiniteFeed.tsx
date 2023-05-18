@@ -6,7 +6,7 @@ import type { RouterOutput } from "~/utils/types";
 import TweetCard from "./TweetCard";
 
 interface InfiniteFeedProps {
-  tweets: RouterOutput["tweet"]["infiniteTweets"]["tweets"] | undefined;
+  tweets: RouterOutput["tweet"]["infiniteFeed"]["tweets"] | undefined;
   isError: boolean;
   isLoading: boolean;
   hasNextPage: boolean | undefined;

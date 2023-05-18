@@ -32,10 +32,10 @@ const NewTweetForm: FC = ({}) => {
       };
 
       const addNewTweet: Parameters<
-        typeof trpcContext.tweet.infiniteTweets.setInfiniteData
+        typeof trpcContext.tweet.infiniteFeed.setInfiniteData
       >[1] = (oldTweets) => {
         if (oldTweets == null || oldTweets.pages[0] == null) {
-          // trpcContext.tweet.infiniteTweets.invalidate();
+          // trpcContext.tweet.infiniteFeed.invalidate();
           return;
         }
 
@@ -51,7 +51,7 @@ const NewTweetForm: FC = ({}) => {
         };
       };
 
-      trpcContext.tweet.infiniteTweets.setInfiniteData({}, addNewTweet);
+      trpcContext.tweet.infiniteFeed.setInfiniteData({}, addNewTweet);
     },
     onError: (err) => {
       console.error(err);

@@ -1,6 +1,9 @@
+import { type Prisma } from "@prisma/client";
+import { type inferAsyncReturnType } from "@trpc/server";
 import { z } from "zod";
 
 import {
+  createTRPCContext,
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
@@ -16,58 +19,17 @@ export const tweetRouter = createTRPCRouter({
       })
     )
     .query(async ({ input: { userId, limit = 10, cursor }, ctx }) => {
-      const currentUserId = ctx.session?.user?.id;
-
-      const tweets = await ctx.prisma.tweet.findMany({
-        take: limit + 1,
-        cursor: cursor ? { createdAt_id: cursor } : undefined,
-        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
-        where: {
+      return getInfiniteFeedHelper({
+        ctx,
+        limit,
+        cursor,
+        whereClause: {
           userId,
         },
-        select: {
-          id: true,
-          content: true,
-          createdAt: true,
-          _count: {
-            select: {
-              likes: true,
-            },
-          },
-          likes:
-            currentUserId == null
-              ? false
-              : { where: { userId: currentUserId } },
-          user: {
-            select: {
-              id: true,
-              name: true,
-              image: true,
-            },
-          },
-        },
       });
-
-      let nextCursor: typeof cursor | undefined = undefined;
-      if (tweets.length > limit) {
-        const nextItem = tweets.pop();
-        if (!nextItem) throw new Error("nextItem is undefined");
-
-        const { id, createdAt } = nextItem;
-        nextCursor = { id, createdAt };
-      }
-
-      return {
-        tweets: tweets.map(({ likes, _count, ...filteredData }) => ({
-          likeCount: _count.likes,
-          likedByMe: likes?.length > 0,
-          ...filteredData,
-        })),
-        nextCursor,
-      };
     }),
 
-  infiniteTweets: publicProcedure
+  infiniteFeed: publicProcedure
     .input(
       z.object({
         onlyFollowing: z.boolean().optional(),
@@ -79,58 +41,23 @@ export const tweetRouter = createTRPCRouter({
       async ({ input: { limit = 10, onlyFollowing = false, cursor }, ctx }) => {
         const currentUserId = ctx.session?.user?.id;
 
-        const tweets = await ctx.prisma.tweet.findMany({
-          take: limit + 1,
-          cursor: cursor ? { createdAt_id: cursor } : undefined,
-          orderBy: [{ createdAt: "desc" }, { id: "desc" }],
-          where:
-            currentUserId == null || !onlyFollowing
-              ? undefined
+        return getInfiniteFeedHelper({
+          ctx,
+          limit,
+          cursor,
+          whereClause:
+            !currentUserId || !onlyFollowing
+              ? {}
               : {
                   user: {
-                    followers: { some: { id: currentUserId } },
+                    follows: {
+                      some: {
+                        id: currentUserId,
+                      },
+                    },
                   },
                 },
-          select: {
-            id: true,
-            content: true,
-            createdAt: true,
-            _count: {
-              select: {
-                likes: true,
-              },
-            },
-            likes:
-              currentUserId == null
-                ? false
-                : { where: { userId: currentUserId } },
-            user: {
-              select: {
-                id: true,
-                name: true,
-                image: true,
-              },
-            },
-          },
         });
-
-        let nextCursor: typeof cursor | undefined = undefined;
-        if (tweets.length > limit) {
-          const nextItem = tweets.pop();
-          if (!nextItem) throw new Error("nextItem is undefined");
-
-          const { id, createdAt } = nextItem;
-          nextCursor = { id, createdAt };
-        }
-
-        return {
-          tweets: tweets.map(({ likes, _count, ...filteredData }) => ({
-            likeCount: _count.likes,
-            likedByMe: likes?.length > 0,
-            ...filteredData,
-          })),
-          nextCursor,
-        };
       }
     ),
 
@@ -166,5 +93,63 @@ export const tweetRouter = createTRPCRouter({
       }
     }),
 });
+
+async function getInfiniteFeedHelper({
+  ctx,
+  limit,
+  cursor,
+  whereClause,
+}: {
+  ctx: inferAsyncReturnType<typeof createTRPCContext>;
+  limit: number;
+  cursor: { id: string; createdAt: Date } | undefined;
+  whereClause: Prisma.TweetWhereInput;
+}) {
+  const currentUserId = ctx.session?.user?.id;
+
+  const tweets = await ctx.prisma.tweet.findMany({
+    take: limit + 1,
+    cursor: cursor ? { createdAt_id: cursor } : undefined,
+    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    where: whereClause,
+    select: {
+      id: true,
+      content: true,
+      createdAt: true,
+      _count: {
+        select: {
+          likes: true,
+        },
+      },
+      likes:
+        currentUserId == null ? false : { where: { userId: currentUserId } },
+      user: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
+      },
+    },
+  });
+
+  let nextCursor: typeof cursor | undefined = undefined;
+  if (tweets.length > limit) {
+    const nextItem = tweets.pop();
+    if (!nextItem) throw new Error("nextItem is undefined");
+
+    const { id, createdAt } = nextItem;
+    nextCursor = { id, createdAt };
+  }
+
+  return {
+    tweets: tweets.map(({ likes, _count, ...filteredData }) => ({
+      likeCount: _count.likes,
+      likedByMe: likes?.length > 0,
+      ...filteredData,
+    })),
+    nextCursor,
+  };
+}
 
 export type TweetRouter = typeof tweetRouter;

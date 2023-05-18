@@ -5,9 +5,9 @@ import type { TweetRouter } from "~/server/api/routers/tweet";
 type TweetRouterOutput = inferRouterOutputs<TweetRouter>;
 
 export type TweetQueryOutput =
-  TweetRouterOutput["infiniteTweets"]["tweets"][number];
+  TweetRouterOutput["infiniteFeed"]["tweets"][number];
 
-export type infiniteFeedQueryOutput = TweetRouterOutput["infiniteTweets"];
+export type infiniteFeedQueryOutput = TweetRouterOutput["infiniteFeed"];
 
 export type RouterInput = inferRouterInputs<AppRouter>;
 export type RouterOutput = inferRouterOutputs<AppRouter>;
