@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import Avatar from "./Avatar";
 import useAutoResizeTextArea from "~/hooks/useAutoResizeTextArea";
 import { api } from "~/utils/api";
-import type { TweetQueryOutput } from "~/utils/types";
+import type { TweetQueryOutput } from "~/utils/trpc";
 
 const NewTweetForm: FC = ({}) => {
   const trpcContext = api.useContext();

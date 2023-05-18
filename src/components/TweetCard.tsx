@@ -1,5 +1,5 @@
 import { type FC } from "react";
-import type { TweetQueryOutput } from "~/utils/types";
+import type { TweetQueryOutput } from "~/utils/trpc";
 import Link from "next/link";
 
 import Avatar from "./Avatar";

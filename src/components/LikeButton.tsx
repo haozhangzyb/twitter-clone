@@ -2,7 +2,7 @@ import { useSession } from "next-auth/react";
 import { type FC } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { api } from "~/utils/api";
-import { type TweetQueryOutput } from "~/utils/types";
+import { type TweetQueryOutput } from "~/utils/trpc";
 
 interface LikeButtonProps {
   tweet: TweetQueryOutput;

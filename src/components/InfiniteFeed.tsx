@@ -2,7 +2,7 @@ import type { UseInfiniteQueryResult } from "@tanstack/react-query";
 import type { FC } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-import type { RouterOutput } from "~/utils/types";
+import type { RouterOutput } from "~/utils/trpc";
 import TweetCard from "./TweetCard";
 
 interface InfiniteFeedProps {
