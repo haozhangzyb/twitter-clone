@@ -12,13 +12,15 @@ const Home: NextPage = () => {
   const { status } = useSession();
   const [activeTab, setActiveTab] = useState<(typeof TABS)[number]>(TABS[0]);
 
+  const isAuthenticated = status === "authenticated";
+
   return (
     <>
       <Header>
         <h1 className="px-4 py-3 text-xl font-bold">Home</h1>
       </Header>
       <div className="flex border-b border-b-slate-600 ">
-        {status === "authenticated" &&
+        {isAuthenticated &&
           TABS.map((tab) => (
             <button
               key={tab}
@@ -34,7 +36,7 @@ const Home: NextPage = () => {
             </button>
           ))}
       </div>
-      <NewTweetForm />
+      {isAuthenticated && <NewTweetForm />}
       <TweetsFeed isOnlyTweetsFromFollowingUsers={activeTab === "Following"} />
     </>
   );

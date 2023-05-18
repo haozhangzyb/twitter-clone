@@ -16,8 +16,6 @@ const NewTweetForm: FC = ({}) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   useAutoResizeTextArea(textAreaRef.current, inputVal);
 
-  if (!user) return null;
-
   const createTweet = api.tweet.create.useMutation({
     onSuccess: (newTweet) => {
       if (status !== "authenticated") return;
@@ -64,6 +62,7 @@ const NewTweetForm: FC = ({}) => {
         { onlyFollowing: false },
         addNewTweet
       );
+      if (!user) return;
       trpcContext.tweet.infiniteProfileFeed.setInfiniteData(
         { userId: user.id },
         addNewTweet
@@ -82,7 +81,6 @@ const NewTweetForm: FC = ({}) => {
   };
 
   if (!sessionData) return null;
-
   return (
     <form
       className="flex gap-2 border-b border-b-slate-600 px-4 py-2"
