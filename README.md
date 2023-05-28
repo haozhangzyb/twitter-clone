@@ -29,12 +29,12 @@ This is full stack twitter clone app.
 
 ## To Do
 
-- add CI
+- ~~add CI~~
 - add delete tweet
 - add comment tweet
 - add log in with different providers
 
-### Run locally
+## Run locally
 
 1. Fill create .evn and fill env variables just like `.env.example`
 2. run below code

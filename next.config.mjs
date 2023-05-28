@@ -30,5 +30,17 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+
+  /* 
+  ignore build errors for typescript and eslint in Vercel deployments 
+  since they're already checked in CI (Github Actions)
+  */
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  swcMinify: true,
 };
 export default config;
