@@ -12,6 +12,7 @@ This is full stack twitter clone app.
 - Follow/Unfollow a person
 - Static Site generation for profile info
 - Incremental Site generation for profile page
+- CI pipeline using Github actions for type-check and lint
 
 ## Tech Stacks
 
