@@ -1,6 +1,8 @@
 import { useRef, type FC, useState } from "react";
-import Button from "./Button";
 import { useSession } from "next-auth/react";
+import { toast } from "react-hot-toast";
+
+import Button from "./Button";
 import Avatar from "./Avatar";
 import useAutoResizeTextArea from "~/hooks/useAutoResizeTextArea";
 import { api } from "~/utils/api";
@@ -70,6 +72,8 @@ const NewTweetForm: FC = ({}) => {
     },
     onError: (err) => {
       console.error(err);
+      // const errorMessage = err.data?.zodError?.fieldErrors.message;
+      toast.error("Failed to create tweet! Please try again later.");
     },
   });
 
