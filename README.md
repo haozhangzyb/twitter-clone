@@ -12,7 +12,8 @@ This is full stack twitter clone app.
 - Follow/Unfollow a person
 - Static Site generation for profile info
 - Incremental Site generation for profile page
-- CI pipeline using Github actions for type-check and lint
+- CI pipeline using [Github Actions](https://github.com/features/actions) for type-check and lint
+- Rate limit using [Upstash](https://upstash.com/)
 
 ## Tech Stacks
 
@@ -25,8 +26,10 @@ This is full stack twitter clone app.
 
 ### Optional
 
-- [planetscale](https://planetscale.com/) for MySQL DB hosting.
+- [PlanetScale](https://planetscale.com/) for MySQL DB hosting.
 - [Vercel](https://vercel.com/) for App deployment
+- [Upstash](https://upstash.com/) for Rate limiting
+- [Github Actions](https://github.com/features/actions) for CI pipeline
 
 ## To Do
 
