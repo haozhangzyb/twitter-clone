@@ -1,5 +1,5 @@
 import { type Prisma } from "@prisma/client";
-import { type inferAsyncReturnType } from "@trpc/server";
+import { TRPCError, type inferAsyncReturnType } from "@trpc/server";
 import { z } from "zod";
 
 import {
@@ -8,6 +8,16 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+
+import { Ratelimit } from "@upstash/ratelimit"; // for deno: see above
+import { Redis } from "@upstash/redis";
+
+// Create a new ratelimiter, that allows 3 requests per 60 seconds
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(3, "60 s"),
+  analytics: true,
+});
 
 export const tweetRouter = createTRPCRouter({
   infiniteProfileFeed: publicProcedure
@@ -65,6 +75,12 @@ export const tweetRouter = createTRPCRouter({
     .input(z.object({ content: z.string() }))
     .mutation(async ({ input: { content }, ctx }) => {
       const userId = ctx.session.user.id;
+
+      const { success } = await ratelimit.limit(userId);
+
+      if (!success) {
+        throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
+      }
 
       const tweet = await ctx.prisma.tweet.create({
         data: {
